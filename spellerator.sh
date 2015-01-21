@@ -24,8 +24,9 @@ fi
 
 # Main loop, run hunspell against every ASCII file in specified dir
 
-for file in $(find $dir -path $dir/.git -prune -o -type f -exec file -F "" {} + | grep ASCII | awk '{ print $1 }') 
+for file in $(find $dir -path $dir/.git -prune -o -type f -exec file -F "" {} + | grep 'ASCII\|UTF-8' | awk '{ print $1 }') 
   do
+    echo $file
     hunspell $file
   done	
 
