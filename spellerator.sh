@@ -4,6 +4,7 @@
 dir=$1
 library="$HOME/.spellerator"
 hsdefault="$HOME/.hunspell_en_US"
+# This var gets the last directory out of a path string, ie "/home/user/jank/github/myproject" becomes "myproject"
 project_name=$(echo $dir | awk 'BEGIN { FS = "/" } ; { print $NF }')
 
 # Make a backup of existing hunspell private dictionary if need be
@@ -12,6 +13,14 @@ if [ -f $hsdefault ]
     echo "Private dictionary for hunspell exists, backing it up to .bak"
     mv $hsdefault $hsdefault.bak
 fi
+
+
+if [ -f $library/$project_name ]
+    then
+    echo "Using existing dictionary from library for project: $project_name"
+    cp $library/$project_name $hsdefault
+fi
+
 
 # Main loop, run hunspell against every ASCII file in specified dir
 
