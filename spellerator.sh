@@ -11,21 +11,23 @@ project_name=$(echo $dir | awk 'BEGIN { FS = "/" } ; { print $NF }')
 
 
 
+
 first_run(){
 
-    # TODO: Extend this to automatically place dictionary files from /dicts into $dicthome
-    
+echo "First run, building out spellerator home dir"  
     
 # Create library dir if needed
 if [ -d $library ]
     then
-    echo "Library directory exists"
+    echo "Library directory exists, moving on"
     else
     echo "Creating initial library directory"
-    mkdir $library
+    mkdir -p $library
+    cp -R dicts $srhome/.
 fi
 
 }
+
 
 
 startup(){
@@ -44,15 +46,19 @@ if [ -f $hsdefault ]
 fi
 }
 
+
+
 check_files(){
 # Main loop, run hunspell against every ASCII file in specified dir
 
 for file in $(find $dir -path $dir/.git -prune -o -type f -exec file -F "" {} + | grep 'ASCII\|UTF-8' | awk '{ print $1 }') 
   do
     echo $file
-    hunspell $file
+    hunspell -d $dicthome/en_US $file
   done	
 }
+
+
 
 
 end(){
@@ -64,12 +70,15 @@ mv $hsdefault $library/$project_name
 }
 
 
-
-
 ## Run ##
 
-#TODO: check for actual first run
-first_run
+# Check if first run
+if [ ! -d $srhome ]
+then
+    first_run
+fi
+
+# Run through
 startup
 check_files
 end
