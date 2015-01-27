@@ -46,10 +46,6 @@ if [ -f $library/$project_name ]
     echo "Using existing dictionary from library for project: $project_name"
     cp $library/$project_name $hsdefault
 fi
-echo "3333 $library"
-echo "2222 $hsdefault"
-echo "11111 $project_name"
-
 
 }
 
@@ -60,7 +56,6 @@ check_files(){
 
 for file in $(find $dir -path $dir/.git -prune -o -type f -exec file -F "" {} + | grep 'ASCII\|UTF-8' | awk '{ print $1 }') 
   do
-    echo $file
     hunspell -d $dicthome/en_US $file
   done	
 }
@@ -77,8 +72,9 @@ mv $hsdefault $library/$project_name
 }
 
 
-## Run ##
 
+
+## Run ##
 
 while [[ $# > 1 ]]
 do
@@ -109,7 +105,6 @@ fi
 
 # Run through
 startup
-echo $dir
 check_files
 end
 
