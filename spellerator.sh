@@ -1,7 +1,7 @@
 #!/bin/bash
 # Spell check a project 
 
-dir=$1
+#dir=$1
 srhome="$HOME/.spellerator"
 library="$srhome/library"
 dicthome="$srhome/dicts"
@@ -31,19 +31,26 @@ fi
 
 
 startup(){
+# Make a backup of existing hunspell private dictionary if need be                                                                                                                  
+if [ -f $hsdefault ]
+    then
+    echo "Private dictionary for hunspell exists, backing it up to .bak"
+    mv $hsdefault $hsdefault.bak
+fi
+
+
+
 # Use existing personal dict if available
 if [ -f $library/$project_name ]
     then
     echo "Using existing dictionary from library for project: $project_name"
     cp $library/$project_name $hsdefault
 fi
+echo "3333 $library"
+echo "2222 $hsdefault"
+echo "11111 $project_name"
 
-# Make a backup of existing hunspell private dictionary if need be
-if [ -f $hsdefault ]
-    then
-    echo "Private dictionary for hunspell exists, backing it up to .bak"
-    mv $hsdefault $hsdefault.bak
-fi
+
 }
 
 
@@ -72,6 +79,28 @@ mv $hsdefault $library/$project_name
 
 ## Run ##
 
+
+while [[ $# > 1 ]]
+do
+key="$1"
+
+case $key in
+    -d|--directory)
+    dir="$2"
+    shift
+    ;;
+    -p|--projectname)
+    project_name="$2"
+    shift
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift
+done
+
+
 # Check if first run
 if [ ! -d $srhome ]
 then
@@ -80,6 +109,7 @@ fi
 
 # Run through
 startup
+echo $dir
 check_files
 end
 
