@@ -90,7 +90,6 @@ case $key in
     shift
     ;;
     *)
-            # unknown option
     ;;
 esac
 shift
