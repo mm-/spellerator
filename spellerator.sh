@@ -89,6 +89,9 @@ case $key in
     project_name="$2"
     shift
     ;;
+    -h|--help)
+	echo "Specify the directory to check with -d and optional project name to refer to in the future with -p" 
+    ;;
     *)
     ;;
 esac
